@@ -1,25 +1,16 @@
 import { OpenRouter } from "@openrouter/sdk";
 import Bun from "bun";
-import { ANSHUMAN_PROMPT } from "../prompts";
+import type { ChatMessages } from "@openrouter/sdk/models";
 
 const client = new OpenRouter({
 	apiKey: Bun.env.OPENROUTER_API_KEY,
 });
 
-export const main = async () => {
+export const sendMessage = async (messages : ChatMessages[], res?: any) => {
 	const stream = await client.chat.send({
 		chatRequest: {
 			model: "openai/gpt-oss-120b:free",
-			messages: [
-				{
-					role : "system",
-					content : ANSHUMAN_PROMPT
-				},
-				{
-					role: "user",
-					content: "What is the meaning of life?",
-				},
-			],
+			messages,
 			stream: true,
 			reasoning: {
 				effort: "minimal",
@@ -36,7 +27,10 @@ export const main = async () => {
 		const content = chunk.choices[0]?.delta?.content;
 		if (content) {
 			response += content;
-			process.stdout.write(content);
+			if (res) {
+				res.write(`data: ${JSON.stringify({ content })}\n\n`);
+			}
 		}
 	}
+	return response;
 };
