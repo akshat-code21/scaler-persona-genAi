@@ -24,9 +24,9 @@ export default function Header() {
                 return;
             }
             handlePersonaChange(newPersona)
-        }}>
+        }} defaultValue={"Anshuman"}>
             <SelectTrigger className="w-full max-w-48">
-                <SelectValue placeholder="Select a persona" className={"text-md"} />
+                <SelectValue placeholder="Select a persona" className={"text-md"}/>
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>

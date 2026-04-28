@@ -1,6 +1,7 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "./ui/button";
 import type { Message } from ".";
+import { ThinkingIndicator } from "./ThinkingIndicator";
 
 
 export default function Chat({
@@ -20,7 +21,6 @@ export default function Chat({
     return (
         <div className="flex flex-col w-full h-full">
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                {thinking && <div>Thinking.....</div>}
                 {messages.map((msg, idx) => (
                     <div key={idx} className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}>
                         <p className={msg.role === "user" ? "bg-blue-500 text-white px-3 py-2 rounded-lg text-sm max-w-md" : "bg-gray-300 text-black px-3 py-2 rounded-lg text-sm max-w-md"}>
@@ -28,6 +28,7 @@ export default function Chat({
                         </p>
                     </div>
                 ))}
+                {thinking && <ThinkingIndicator />}
             </div>
             <form
                 onSubmit={async (e) => {
