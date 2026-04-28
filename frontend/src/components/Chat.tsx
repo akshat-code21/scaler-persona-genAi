@@ -5,12 +5,10 @@ import { ThinkingIndicator } from "./ThinkingIndicator";
 
 
 export default function Chat({
-    showHero,
     setShowHero,
     messages,
     setMessages
 }: {
-    showHero: boolean,
     setShowHero: Dispatch<SetStateAction<boolean>>
     messages: Message[],
     setMessages: Dispatch<SetStateAction<Message[]>>

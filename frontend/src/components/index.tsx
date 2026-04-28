@@ -16,7 +16,7 @@ export default function Index() {
             <Header />
             <div className="flex-1 flex flex-col items-center justify-between overflow-hidden">
                 {showHero && <Hero />}
-                <Chat showHero={showHero} setShowHero={setShowHero} messages={messages} setMessages={setMessages} />
+                <Chat setShowHero={setShowHero} messages={messages} setMessages={setMessages} />
             </div>
         </div>
     )

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 
 export default function Header() {
-    const [persona, setPersona] = useState<string>("ANSHUMAN");
+    const [_persona, setPersona] = useState<string>("ANSHUMAN");
 
     const handlePersonaChange = async (newPersona: string) => {
         setPersona(newPersona.toUpperCase());
