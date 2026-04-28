@@ -37,7 +37,8 @@ chatRouter.post("/", async (req, res) => {
 
 		res.end();
 	} catch (error) {
-		res.status(500).json({ error: "Failed to process chat" });
+		console.error("Chat error:", error);
+		res.status(500).json({ error: "Failed to process chat", details: (error as Error).message });
 	}
 });
 

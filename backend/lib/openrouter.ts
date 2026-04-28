@@ -28,7 +28,7 @@ export const sendMessage = async (messages : ChatMessages[], res?: any) => {
 		if (content) {
 			response += content;
 			if (res) {
-				res.write(`data: ${JSON.stringify({ content })}\n\n`);
+				res.write(content);
 			}
 		}
 	}
