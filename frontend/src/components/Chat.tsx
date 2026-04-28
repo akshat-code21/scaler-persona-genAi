@@ -15,10 +15,12 @@ export default function Chat({
     setMessages: Dispatch<SetStateAction<Message[]>>
 }) {
     const [input, setInput] = useState('');
+    const [thinking,setThinking] = useState(false);
 
     return (
         <div className="flex flex-col w-full h-full">
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                {thinking && <div>Thinking.....</div>}
                 {messages.map((msg, idx) => (
                     <div key={idx} className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}>
                         <p className={msg.role === "user" ? "bg-blue-500 text-white px-3 py-2 rounded-lg text-sm max-w-md" : "bg-gray-300 text-black px-3 py-2 rounded-lg text-sm max-w-md"}>
@@ -33,6 +35,7 @@ export default function Chat({
                     setShowHero(false)
                     setMessages(prev => [...prev, { role: "user", content: input }])
                     setInput('');
+                    setThinking(true)
 
                     const res = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/chat`, {
                         method: "POST",
@@ -51,6 +54,7 @@ export default function Chat({
                     while (true) {
                         const { value, done: readerDone } = await reader.read();
                         if (readerDone) break;
+                        if(value) setThinking(false)
                         assistantMessage += decoder.decode(value);
                         setMessages(prev => {
                             const updated = [...prev];

@@ -16,7 +16,7 @@ export const sendMessage = async (messages : ChatMessages[], res?: any) => {
 				effort: "minimal",
 			},
 			responseFormat: {
-				type: "json_object",
+				type: "text",
 			},
 			temperature: 0.2,		
 		},
