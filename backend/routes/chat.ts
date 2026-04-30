@@ -2,7 +2,6 @@ import { Router } from "express";
 import { ABHIMANYU_PROMPT, ANSHUMAN_PROMPT, KSHITIJ_PROMPT } from "../prompts";
 import { sendMessage } from "../lib/openrouter";
 import type { ChatMessages, ChatUserMessage } from "@openrouter/sdk/models";
-import { pipeline } from "node:stream/promises";
 
 const chatRouter = Router();
 
@@ -17,7 +16,10 @@ let personas = ["ANSHUMAN", "ABHIMANYU", "KSHITIJ"] as string[];
 
 chatRouter.post("/", async (req, res) => {
 	try {
-		const { userQuery } = req.body;
+		const userQuery = typeof req.body?.userQuery === "string" ? req.body.userQuery.trim() : "";
+		if (!userQuery) {
+			return res.status(400).json({ error: "Message required" });
+		}
 		const newObject = {
 			role: "user",
 			content: userQuery,
@@ -44,13 +46,14 @@ chatRouter.post("/", async (req, res) => {
 
 chatRouter.patch("/", async (req, res) => {
 	const { persona } = req.body;
-	if (!persona || !personas.includes(persona.toString().toUpperCase())) {
-		res.status(400).json({
+	const key = persona?.toString().toUpperCase();
+	if (!key || !personas.includes(key)) {
+		return res.status(400).json({
 			message: "New persona not correct",
 		});
 	}
 	let prompt = "";
-	switch (persona) {
+	switch (key) {
 		case "ANSHUMAN":
 			prompt = ANSHUMAN_PROMPT;
 			break;
@@ -60,12 +63,13 @@ chatRouter.patch("/", async (req, res) => {
 		case "KSHITIJ":
 			prompt = KSHITIJ_PROMPT;
 			break;
+		default:
+			return res.status(400).json({
+				message: "New persona not correct",
+			});
 	}
-	messages.push({
-		role: "system",
-		content: prompt,
-	});
-	res.json({
+	messages = [{ role: "system", content: prompt }] as ChatMessages[];
+	return res.json({
 		message: "Persona changed successfully.",
 	});
 });
